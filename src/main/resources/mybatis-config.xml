@@ -3,6 +3,8 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <settings>
+        <!-- 使用Log4j2打印日志 -->
+        <setting name="logImpl" value="LOG4J2" />
         <!-- 全局映射器启用缓存 -->
         <setting name="cacheEnabled" value="true"/>
         <!-- 对于未知的SQL查询，允许返回不同的结果集以达到通用的效果-->
@@ -17,5 +19,8 @@
         <setting name="defaultStatementTimeout" value="25000"/>
         <!--开启驼峰式命名规则映射-->
         <setting name="mapUnderscoreToCamelCase" value="true" />
+
     </settings>
+
+
 </configuration>

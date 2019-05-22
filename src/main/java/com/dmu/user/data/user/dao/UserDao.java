@@ -1,9 +1,7 @@
-package com.lnnu.studyhelper.data.dao;
+package com.dmu.user.data.user.dao;
 
-import com.lnnu.studyhelper.data.model.User;
-import org.apache.ibatis.annotations.Insert;
+import com.dmu.user.data.user.model.User;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.Map;
 
