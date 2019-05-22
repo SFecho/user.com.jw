@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dmu.user.data.content.dao.ContentDao">
+
+    <parameterMap id="InputPathMap" type="java.util.Map">
+        <parameter property="name" jdbcType="VARCHAR"  mode="IN"></parameter>
+    </parameterMap>
+    <!---->
+    <resultMap type="String" id="OutPutPathMap">
+        <id property="path" column="path"/>
+    </resultMap>
+
+    <select id="getPath" parameterMap="InputPathMap" statementType="CALLABLE" resultMap="OutPutPathMap">
+        {CALL get_path(#{name, mode=IN})}
+    </select>
+    
+    
+</mapper>
+
