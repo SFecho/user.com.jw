@@ -9,4 +9,5 @@ import java.util.Map;
 @Mapper
 public interface ContentDao {
     public List<String> getPath(@Param("name") String params);
+    public int writePath(@Param("dirPath")String dirPath, @Param("newFilePath")String newFileName, @Param("originFilePath")String originFileName, @Param("layer")int layer);
 }

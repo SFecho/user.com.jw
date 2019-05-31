@@ -3,18 +3,28 @@
 
 <mapper namespace="com.dmu.user.data.content.dao.ContentDao">
 
-    <parameterMap id="InputPathMap" type="java.util.Map">
+    <parameterMap id="getPathInputMap" type="java.util.Map">
         <parameter property="name" jdbcType="VARCHAR"  mode="IN"></parameter>
     </parameterMap>
     <!---->
-    <resultMap type="String" id="OutPutPathMap">
+    <resultMap type="String" id="getPathOutPutMap">
         <id property="path" column="path"/>
     </resultMap>
 
-    <select id="getPath" parameterMap="InputPathMap" statementType="CALLABLE" resultMap="OutPutPathMap">
+    <parameterMap id="writePathInputMap" type="java.util.Map">
+        <parameter property="dirPath" jdbcType="VARCHAR"></parameter>
+        <parameter property="newFilePath" jdbcType="VARCHAR"></parameter>
+        <parameter property="originFilePath" jdbcType="VARCHAR"></parameter>
+        <parameter property="layer" jdbcType="INTEGER"></parameter>
+    </parameterMap>
+
+    <select id="getPath" parameterMap="getPathInputMap" statementType="CALLABLE"  resultMap="getPathOutPutMap">
         {CALL get_path(#{name, mode=IN})}
     </select>
-    
+
+    <select id="writePath" parameterMap="writePathInputMap" resultType="int">
+        select write_path(#{dirPath}, #{newFilePath}, #{originFilePath}. #{layer})  from dual
+    </select>
     
 </mapper>
 

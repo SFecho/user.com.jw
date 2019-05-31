@@ -11,7 +11,7 @@
  Target Server Version : 100138
  File Encoding         : 65001
 
- Date: 23/05/2019 00:13:32
+ Date: 31/05/2019 14:50:56
 */
 
 SET NAMES utf8mb4;
@@ -149,6 +149,9 @@ INSERT INTO `content` VALUES (111, '结核', 2, 109);
 INSERT INTO `content` VALUES (112, '恶性淋巴瘤', 2, 109);
 INSERT INTO `content` VALUES (113, '淋巴结转移癌', 2, 109);
 INSERT INTO `content` VALUES (114, '肌肉、骨骼超声', 1, 0);
+INSERT INTO `content` VALUES (115, 'aaa', 1, 0);
+INSERT INTO `content` VALUES (116, 'bbb', 2, 115);
+INSERT INTO `content` VALUES (117, 'ccc', 3, 116);
 
 -- ----------------------------
 -- Table structure for file_path
@@ -164,6 +167,7 @@ CREATE TABLE `file_path`  (
 -- ----------------------------
 -- Records of file_path
 -- ----------------------------
+INSERT INTO `file_path` VALUES (117, 'ccc', 'bbb');
 INSERT INTO `file_path` VALUES (3, 'ddd', 'asda');
 
 -- ----------------------------
@@ -182,8 +186,8 @@ CREATE TABLE `user_info`  (
 -- ----------------------------
 -- Records of user_info
 -- ----------------------------
-INSERT INTO `user_info` VALUES ('201521012358', '奶子尧', '123456', 'M', 'simonfuecho@163.com');
-INSERT INTO `user_info` VALUES ('201521012362', 'SimonFu', '123456', 'M', 'simonfuecho@163.com');
+INSERT INTO `user_info` VALUES ('201521012358', '李宗尧', '123456', 'M', 'simonfuecho@163.com');
+INSERT INTO `user_info` VALUES ('201521012362', '傅世林', '123456', 'M', 'simonfuecho@163.com');
 
 -- ----------------------------
 -- Procedure structure for get_path
@@ -216,6 +220,72 @@ BEGIN
 	END WHILE;
 
 	SELECT * FROM DUAL_TBL;
+END
+;;
+delimiter ;
+
+-- ----------------------------
+-- Function structure for write_path
+-- ----------------------------
+DROP FUNCTION IF EXISTS `write_path`;
+delimiter ;;
+CREATE FUNCTION `write_path`(`dirPath` VARCHAR(50), 
+	`newFileName` VARCHAR(50), 
+	`originFileName` VARCHAR(50),
+	`layer` int(11))
+ RETURNS int(11)
+BEGIN
+	#Routine body goes here...
+	DECLARE ret_val int DEFAULT 1;
+	#记录当前搜索项文件对应的parentid
+	DECLARE cur_parent_id int DEFAULT 0;
+	DECLARE cur_id INT DEFAULT 0;
+	#数据表中已知最大的id号
+	DECLARE cur_max_id INT DEFAULT 0;
+	#当前目录项
+	DECLARE cur_content_name VARCHAR(50);
+	#记录路径字符串的长度
+	DECLARE next_parent_id int;
+	#循环遍历i
+	DECLARE i int DEFAULT 1;
+	#记录项数
+	DECLARE items int;
+
+	IF layer = 0 THEN
+		RETURN -1;
+	END IF;
+	
+	#获得write_path当前的id
+	SELECT MAX(id) INTO cur_max_id
+	FROM content;
+	
+	WHILE i <= layer DO
+		SET cur_content_name := SUBSTRING_INDEX(SUBSTRING_INDEX(dirPath,'/', i), '/',-1);
+		
+		SELECT count(*)	INTO
+		items FROM content
+		WHERE
+		name = cur_content_name;
+		
+		IF items <> 0 THEN
+			SELECT id 
+			INTO cur_parent_id 
+			FROM content
+			WHERE parentid = cur_parent_id
+			AND name = cur_content_name;
+		ELSE
+			SET cur_max_id := cur_max_id + 1;
+			INSERT INTO content
+			VALUES(cur_max_id, cur_content_name, i, cur_parent_id);
+			SET cur_parent_id := cur_max_id;
+		END IF;
+		
+		SET i := i + 1;
+	END WHILE;
+	
+	INSERT INTO file_path VALUES(cur_parent_id, newFileName, originFileName);
+
+	RETURN 1;
 END
 ;;
 delimiter ;
