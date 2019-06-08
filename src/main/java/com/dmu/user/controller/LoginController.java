@@ -15,11 +15,7 @@ public class LoginController extends BaseController {
 
     @PostMapping(value = "/dologin", produces = "application/json; charset=utf-8", consumes = "application/json; charset=utf-8")
     public User doLogin(@RequestBody JSONObject message, HttpServletRequest request){
-
         User user = userService.getUser(message);
-
-        logger.debug(contentService.getPath("ddd"));
-
         return user;
     }
 }

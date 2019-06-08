@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dmu.user.data.file.dao.FileInfoDao">
+
+    <parameterMap id="getFileListInputMap" type="java.util.Map">
+        <parameter property="parentId"  jdbcType="INTEGER"></parameter>
+    </parameterMap>
+
+    <resultMap id="getFileListOutPutMap" type="com.dmu.user.data.file.model.FileInfo">
+        <!--主键-->
+        <result property="parentId" column="parentid"></result>
+        <result property="name" column="name"></result>
+        <result property="path" column="path"></result>
+        <result property="date" column="date"></result>
+        <result property="size" column="size"></result>
+    </resultMap>
+
+    <select id="getFileList" parameterMap="getFileListInputMap"  resultMap="getFileListOutPutMap">
+        select * from file_path
+        where parentid = #{parentId}
+    </select>
+</mapper>

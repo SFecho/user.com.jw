@@ -11,7 +11,7 @@
  Target Server Version : 100138
  File Encoding         : 65001
 
- Date: 31/05/2019 14:50:56
+ Date: 08/06/2019 09:37:32
 */
 
 SET NAMES utf8mb4;
@@ -149,9 +149,6 @@ INSERT INTO `content` VALUES (111, '结核', 2, 109);
 INSERT INTO `content` VALUES (112, '恶性淋巴瘤', 2, 109);
 INSERT INTO `content` VALUES (113, '淋巴结转移癌', 2, 109);
 INSERT INTO `content` VALUES (114, '肌肉、骨骼超声', 1, 0);
-INSERT INTO `content` VALUES (115, 'aaa', 1, 0);
-INSERT INTO `content` VALUES (116, 'bbb', 2, 115);
-INSERT INTO `content` VALUES (117, 'ccc', 3, 116);
 
 -- ----------------------------
 -- Table structure for file_path
@@ -160,15 +157,26 @@ DROP TABLE IF EXISTS `file_path`;
 CREATE TABLE `file_path`  (
   `parentid` int(20) NOT NULL,
   `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `path` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `path` varchar(130) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `date` datetime(0) NOT NULL,
+  `size` bigint(11) NOT NULL,
   PRIMARY KEY (`name`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of file_path
 -- ----------------------------
-INSERT INTO `file_path` VALUES (117, 'ccc', 'bbb');
-INSERT INTO `file_path` VALUES (3, 'ddd', 'asda');
+INSERT INTO `file_path` VALUES (7, '111', '111.jpg', '2019-06-07 09:49:36', 1277444);
+INSERT INTO `file_path` VALUES (7, '1212111', '1212111.jpg', '2019-06-07 13:51:43', 1277444);
+INSERT INTO `file_path` VALUES (7, '1333', '1333.jpg', '2019-06-07 09:51:41', 1277444);
+INSERT INTO `file_path` VALUES (7, '222', '222.jpg', '2019-06-07 09:49:48', 1277444);
+INSERT INTO `file_path` VALUES (7, '2323222', '2323222.jpg', '2019-06-07 13:51:02', 1277444);
+INSERT INTO `file_path` VALUES (7, '23232323', '23232323.jpg', '2019-06-07 13:51:49', 1194532);
+INSERT INTO `file_path` VALUES (7, '333', '333.jpg', '2019-06-07 09:50:03', 1277444);
+INSERT INTO `file_path` VALUES (7, 'aaaa', 'aaaa.jpg', '2019-06-07 13:33:09', 429951);
+INSERT INTO `file_path` VALUES (7, 'BobLee', 'BobLee.jpg', '2019-06-07 13:34:12', 1194532);
+INSERT INTO `file_path` VALUES (7, 'LeeAZ', 'LeeAZ.jpg', '2019-06-07 13:35:42', 1194532);
+INSERT INTO `file_path` VALUES (7, '图片1', '图片1.jpg', '2019-06-07 12:10:51', 626435);
 
 -- ----------------------------
 -- Table structure for user_info
@@ -232,7 +240,8 @@ delimiter ;;
 CREATE FUNCTION `write_path`(`dirPath` VARCHAR(50), 
 	`newFileName` VARCHAR(50), 
 	`originFileName` VARCHAR(50),
-	`layer` int(11))
+	`layer` int(11),
+	`size` bigint(11))
  RETURNS int(11)
 BEGIN
 	#Routine body goes here...
@@ -244,8 +253,6 @@ BEGIN
 	DECLARE cur_max_id INT DEFAULT 0;
 	#当前目录项
 	DECLARE cur_content_name VARCHAR(50);
-	#记录路径字符串的长度
-	DECLARE next_parent_id int;
 	#循环遍历i
 	DECLARE i int DEFAULT 1;
 	#记录项数
@@ -265,7 +272,9 @@ BEGIN
 		SELECT count(*)	INTO
 		items FROM content
 		WHERE
-		name = cur_content_name;
+		name = cur_content_name
+		AND parentid = cur_parent_id;
+		
 		
 		IF items <> 0 THEN
 			SELECT id 
@@ -283,7 +292,7 @@ BEGIN
 		SET i := i + 1;
 	END WHILE;
 	
-	INSERT INTO file_path VALUES(cur_parent_id, newFileName, originFileName);
+	INSERT INTO file_path VALUES(cur_parent_id, newFileName, originFileName, NOW(), `size`);
 
 	RETURN 1;
 END

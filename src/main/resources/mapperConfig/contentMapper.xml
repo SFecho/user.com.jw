@@ -6,24 +6,45 @@
     <parameterMap id="getPathInputMap" type="java.util.Map">
         <parameter property="name" jdbcType="VARCHAR"  mode="IN"></parameter>
     </parameterMap>
+
+    <parameterMap id="getContentListInputMap" type="java.util.Map">
+        <parameter property="parentid" jdbcType="INTEGER"></parameter>
+    </parameterMap>
     <!---->
     <resultMap type="String" id="getPathOutPutMap">
         <id property="path" column="path"/>
     </resultMap>
 
     <parameterMap id="writePathInputMap" type="java.util.Map">
-        <parameter property="dirPath" jdbcType="VARCHAR"></parameter>
+        <parameter property="dirPath"  jdbcType="VARCHAR" ></parameter>
         <parameter property="newFilePath" jdbcType="VARCHAR"></parameter>
         <parameter property="originFilePath" jdbcType="VARCHAR"></parameter>
         <parameter property="layer" jdbcType="INTEGER"></parameter>
+        <parameter property="size" jdbcType="BIGINT"></parameter>
     </parameterMap>
+
+    <resultMap id="contentMap" type="com.dmu.user.data.content.model.Content">
+        <!--主键-->
+        <id property="id" column="id"></id>
+        <result property="parentId" column="parentid"></result>
+        <result property="name" column="name"></result>
+        <result property="layer" column="layer"></result>
+    </resultMap>
 
     <select id="getPath" parameterMap="getPathInputMap" statementType="CALLABLE"  resultMap="getPathOutPutMap">
         {CALL get_path(#{name, mode=IN})}
     </select>
 
-    <select id="writePath" parameterMap="writePathInputMap" resultType="int">
-        select write_path(#{dirPath}, #{newFilePath}, #{originFilePath}. #{layer})  from dual
+    <!--  public int writePath(@Param("dirPath")String dirPath, @Param("newFilePath")String newFileName, @Param("originFilePath")String originFileName, @Param("layer")int layer); -->
+    <select id="writePath" parameterMap="writePathInputMap"  resultType="java.lang.Integer">
+       select write_path(#{dirPath}, #{newFilePath}, #{originFilePath}, #{layer}, #{size})
+    </select>
+
+
+
+    <select id="getContentList" resultMap="contentMap">
+        select * from content
+        where parentid = #{parentid}
     </select>
     
 </mapper>
