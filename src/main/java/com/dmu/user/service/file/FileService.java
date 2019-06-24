@@ -118,6 +118,7 @@ public class FileService implements IFileService {
             //下载文件以form的形式
             response.setContentType("multipart/form-data");
             String saveFileName = (String)pathMap.get("filepath");
+            saveFileName = new String(saveFileName.getBytes("UTF-8"),"iso-8859-1");
             response.addHeader("Content-Disposition", "attachment; filename=\"" + saveFileName + "\"");
             outputStream = response.getOutputStream();
             ftpUtil.downloadFile(pathMap.get("dirpath"), pathMap.get("filepath"), outputStream);

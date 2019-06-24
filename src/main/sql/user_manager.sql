@@ -11,7 +11,7 @@
  Target Server Version : 100138
  File Encoding         : 65001
 
- Date: 08/06/2019 09:37:32
+ Date: 24/06/2019 10:56:29
 */
 
 SET NAMES utf8mb4;
@@ -167,9 +167,13 @@ CREATE TABLE `file_path`  (
 -- Records of file_path
 -- ----------------------------
 INSERT INTO `file_path` VALUES (7, '111', '111.jpg', '2019-06-07 09:49:36', 1277444);
+INSERT INTO `file_path` VALUES (115, '111222', '111222.txt', '2019-06-08 10:01:20', 12);
 INSERT INTO `file_path` VALUES (7, '1212111', '1212111.jpg', '2019-06-07 13:51:43', 1277444);
 INSERT INTO `file_path` VALUES (7, '1333', '1333.jpg', '2019-06-07 09:51:41', 1277444);
 INSERT INTO `file_path` VALUES (7, '222', '222.jpg', '2019-06-07 09:49:48', 1277444);
+INSERT INTO `file_path` VALUES (7, '2221333我', '2221333我.txt', '2019-06-08 11:16:07', 12);
+INSERT INTO `file_path` VALUES (7, '2323', '2323.jpg', '2019-06-20 12:23:07', 1194532);
+INSERT INTO `file_path` VALUES (7, '2323111', '2323111.txt', '2019-06-08 10:05:40', 12);
 INSERT INTO `file_path` VALUES (7, '2323222', '2323222.jpg', '2019-06-07 13:51:02', 1277444);
 INSERT INTO `file_path` VALUES (7, '23232323', '23232323.jpg', '2019-06-07 13:51:49', 1194532);
 INSERT INTO `file_path` VALUES (7, '333', '333.jpg', '2019-06-07 09:50:03', 1277444);
@@ -196,6 +200,20 @@ CREATE TABLE `user_info`  (
 -- ----------------------------
 INSERT INTO `user_info` VALUES ('201521012358', '李宗尧', '123456', 'M', 'simonfuecho@163.com');
 INSERT INTO `user_info` VALUES ('201521012362', '傅世林', '123456', 'M', 'simonfuecho@163.com');
+
+-- ----------------------------
+-- Procedure structure for delete_path
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `delete_path`;
+delimiter ;;
+CREATE PROCEDURE `delete_path`(IN `name` varchar(50))
+BEGIN
+	#Routine body goes here...
+	
+
+END
+;;
+delimiter ;
 
 -- ----------------------------
 -- Procedure structure for get_path
